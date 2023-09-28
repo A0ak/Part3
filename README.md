@@ -31,6 +31,13 @@ The `package.json` file is the configuration file of the Node.js project. It det
 6. `"devDependencies": {"nodemon": "^3.0.1"}`: This project has a development dependency named 'nodemon'. When developing Node.js applications, Nodemon tracks file changes and automatically restarts the application.
 
 
+## .gitignore
+
+Right now I'm only adding files that I don't want to be tracked by 'git'. I don't know any other feature.
+
+## package-lock.json
+
+This file provides a complete and precise snapshot of our application's dependencies, and this snapshot ensures that our project always runs the same way.
 
 
 
