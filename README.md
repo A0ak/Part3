@@ -38,30 +38,3 @@ Right now I'm only adding files that I don't want to be tracked by 'git'. I don'
 ## package-lock.json
 
 This file provides a complete and precise snapshot of our application's dependencies, and this snapshot ensures that our project always runs the same way.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-http://localhost:3001/api/persons
