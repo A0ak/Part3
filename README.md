@@ -1,13 +1,54 @@
-# 3.3: Phonebook backend step 3
+# 3.4: Phonebook backend step 4
 
 The changes that have been made:
 
 ## index.js
 
-1. `const url = require('url')`: url module has been added. This module is used to parse URLs.
+1. I moved the request.method === 'GET' control inside the reqUrl.pathname.startsWith('/api/persons') control. This allows the server to respond differently to different types of requests to the /api/persons URL.
 
-2. `const reqUrl = url.parse(request.url, true)`: reqUrl.pathname started to be used instead of request.url. This is an object obtained by url.parse(request.url, true). This object contains various components of the URL.
+2. I added a new control: request.method === 'DELETE'. This check allows the server to respond to DELETE requests to the /api/persons URL.
+3. In response to DELETE requests, the server deletes a specific contact. This is accomplished by finding and extracting a specific person in the persons array. If the person is not found, the server returns a 'Person not found' message. If the contact is successfully deleted, the server returns a 'Deleted person with id {id}' message, where {id} is the ID of the deleted person.
 
-3. `const id = reqUrl.pathname.split('/').pop()`:  A new variable named id has been added. This variable is obtained by reqUrl.pathname.split('/').pop() and represents the last part of the URL.
+The code block corresponding to these changes is:
+  ```
+     if (reqUrl.pathname.startsWith('/api/persons')) {
+        if (request.method === 'GET') {
+            if (id === 'persons') {
+                response.writeHead(200, { 'Content-Type': 'text/plain' })
+                let responseText = '';
+                for (let person of persons) {
+                    responseText += `- id: ${person.id}\n  name: ${person.name}\n  number: ${person.number}\n`;
+                }
+                response.end(responseText);
+            } else {
+                const person = persons.find(p => p.id === Number(id))
+                if (person) {
+                    response.writeHead(200, { 'Content-Type': 'text/plain' })
+                    response.end(`- id: ${person.id}\n  name: ${person.name}\n  number: ${person.number}\n`)
+                } else {
+                    response.writeHead(404, { 'Content-Type': 'text/plain' })
+                    response.end('Person not found')
+                }
+            }
+        } else if (request.method === 'DELETE') {
+            const index = persons.findIndex(p => p.id === Number(id))
+            if (index !== -1) {
+                persons.splice(index, 1)
+                response.writeHead(200, { 'Content-Type': 'text/plain' })
+                response.end(`Deleted person with id ${id}`)
+            } else {
+                response.writeHead(404, { 'Content-Type': 'text/plain' })
+                response.end('Person not found')
+            }
+        }
+    }
+    ```
 
- 4. `if (reqUrl.pathname.startsWith('/api/persons') ...  response.end('Person not found')`:  Checking the id variable and returning different responses accordingly: For requests to the /api/persons URL, the value of the id variable is checked. If id is 'persons', a list of all contacts is returned. If id is a number (i.e. the ID of a person), that person is returned. If no such person exists, a 'Person not found' message is returned.
+
+## Testing that the added functionality works with the Postman or Visual Studio Code REST client:
+
+- A new request is created in the Postman or Visual Studio Code REST client. This is usually done by clicking a "New Request" or similar button.
+- The type of the request is set to DELETE.
+- The URL of the request is set to http://localhost:3001/api/persons/{id}, where {id} is the ID of the person you want to delete. For example, to delete a person with ID 1, the URL would be http://localhost:3001/api/persons/1.
+- The request is sent by clicking "Send" or a similar button.
+- If the person was successfully deleted, the response will be Deleted person with id {id}. If the person is not found, the response will be Person not found.

@@ -28,19 +28,31 @@ const app = http.createServer((request, response) => {
     const reqUrl = url.parse(request.url, true)
     const id = reqUrl.pathname.split('/').pop()
 
-    if (reqUrl.pathname.startsWith('/api/persons') && request.method === 'GET') {
-        if (id === 'persons') {
-            response.writeHead(200, { 'Content-Type': 'text/plain' })
-            let responseText = '';
-            for (let person of persons) {
-                responseText += `- id: ${person.id}\n  name: ${person.name}\n  number: ${person.number}\n`;
-            }
-            response.end(responseText);
-        } else {
-            const person = persons.find(p => p.id === Number(id))
-            if (person) {
+    if (reqUrl.pathname.startsWith('/api/persons')) {
+        if (request.method === 'GET') {
+            if (id === 'persons') {
                 response.writeHead(200, { 'Content-Type': 'text/plain' })
-                response.end(`- id: ${person.id}\n  name: ${person.name}\n  number: ${person.number}\n`)
+                let responseText = '';
+                for (let person of persons) {
+                    responseText += `- id: ${person.id}\n  name: ${person.name}\n  number: ${person.number}\n`;
+                }
+                response.end(responseText);
+            } else {
+                const person = persons.find(p => p.id === Number(id))
+                if (person) {
+                    response.writeHead(200, { 'Content-Type': 'text/plain' })
+                    response.end(`- id: ${person.id}\n  name: ${person.name}\n  number: ${person.number}\n`)
+                } else {
+                    response.writeHead(404, { 'Content-Type': 'text/plain' })
+                    response.end('Person not found')
+                }
+            }
+        } else if (request.method === 'DELETE') {
+            const index = persons.findIndex(p => p.id === Number(id))
+            if (index !== -1) {
+                persons.splice(index, 1)
+                response.writeHead(200, { 'Content-Type': 'text/plain' })
+                response.end(`Deleted person with id ${id}`)
             } else {
                 response.writeHead(404, { 'Content-Type': 'text/plain' })
                 response.end('Person not found')
