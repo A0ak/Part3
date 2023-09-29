@@ -1,31 +1,13 @@
-# 3.2: Phonebook backend step 2
+# 3.3: Phonebook backend step 3
 
-Changes made in the second step:
+The changes that have been made:
 
 ## index.js
 
-1. `else if (request.url === '/info' && request.method === 'GET') {...}`: Adds the ability for the server to respond to requests to the '/info' URL. This response includes the number of people in the contacts list and the current date and time.
+1. `const url = require('url')`: url module has been added. This module is used to parse URLs.
 
+2. `const reqUrl = url.parse(request.url, true)`: reqUrl.pathname started to be used instead of request.url. This is an object obtained by url.parse(request.url, true). This object contains various components of the URL.
 
-2. `const PORT = process.env.PORT || 3001`: I set the PORT variable to read from environment variables.
+3. `const id = reqUrl.pathname.split('/').pop()`:  A new variable named id has been added. This variable is obtained by reqUrl.pathname.split('/').pop() and represents the last part of the URL.
 
-## package.json
-
-I modified the package.json file as follows:
-
-"scripts": {
-  "start": "cross-env PORT=3001 node index.js",
-  "dev": "cross-env PORT=3002 nodemon index.js",
-  "test": "echo \"Error: no test specified\" && exit 1"
-}
-
-I made this change for:
- 
-We want to start the application simultaneously with both npm start and npm run dev commands. Running the same programs in two instances of the same application may cause a conflict.
-We can use different ports to run the application simultaneously in both development (with nodemon) and production (with node) modes. For this, I changed the scripts in the package.json file to achieve this goal.  
-This solution works on a Unix-based system or a Windows system with Windows Subsystem for Linux (WSL).
-Since I was using a standard Windows command prompt, I used the `cross-env` package to set environment variables. I installed the relevant package using the `npm install --save-dev cross-env` command.
-
-In this way, when you run the npm start command, the application will run on port 3001, and when you run the npm run dev command, the application will run on port 3002.
-
-
+ 4. `if (reqUrl.pathname.startsWith('/api/persons') ...  response.end('Person not found')`:  Checking the id variable and returning different responses accordingly: For requests to the /api/persons URL, the value of the id variable is checked. If id is 'persons', a list of all contacts is returned. If id is a number (i.e. the ID of a person), that person is returned. If no such person exists, a 'Person not found' message is returned.

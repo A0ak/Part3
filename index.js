@@ -1,4 +1,5 @@
 const http = require('http')
+const url = require('url')
 
 let persons = [
     {
@@ -24,14 +25,28 @@ let persons = [
 ];
 
 const app = http.createServer((request, response) => {
-    if (request.url === '/api/persons' && request.method === 'GET') {
-        response.writeHead(200, { 'Content-Type': 'text/plain' })
-        let responseText = '';
-        for (let person of persons) {
-            responseText += `- id: ${person.id}\n  name: ${person.name}\n  number: ${person.number}\n`;
+    const reqUrl = url.parse(request.url, true)
+    const id = reqUrl.pathname.split('/').pop()
+
+    if (reqUrl.pathname.startsWith('/api/persons') && request.method === 'GET') {
+        if (id === 'persons') {
+            response.writeHead(200, { 'Content-Type': 'text/plain' })
+            let responseText = '';
+            for (let person of persons) {
+                responseText += `- id: ${person.id}\n  name: ${person.name}\n  number: ${person.number}\n`;
+            }
+            response.end(responseText);
+        } else {
+            const person = persons.find(p => p.id === Number(id))
+            if (person) {
+                response.writeHead(200, { 'Content-Type': 'text/plain' })
+                response.end(`- id: ${person.id}\n  name: ${person.name}\n  number: ${person.number}\n`)
+            } else {
+                response.writeHead(404, { 'Content-Type': 'text/plain' })
+                response.end('Person not found')
+            }
         }
-        response.end(responseText);
-    } else if (request.url === '/info' && request.method === 'GET') {
+    } else if (reqUrl.pathname === '/info' && request.method === 'GET') {
         response.writeHead(200, { 'Content-Type': 'text/html' })
         response.end(`Phonebook has info for ${persons.length} people<br/>${new Date()}`);
     } else {
