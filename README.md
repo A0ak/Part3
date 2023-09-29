@@ -1,40 +1,31 @@
-# 3.1: Phonebook backend step 1
+# 3.2: Phonebook backend step 2
 
-A Node.js server that responds to HTTP requests.
+Changes made in the second step:
 
 ## index.js
 
-1. `const http = require('http')`: Imports Node.js' built-in http module, which provides functionality for creating HTTP servers and making HTTP requests.
-2. `let persons = [...]`:It is an array of objects representing a person, each containing an id, name and number.
-3. `const app = http.createServer((request, response) => {...})`:  This line creates an HTTP server. The function passed to createServer is a request listener that is called every time the server receives a request.
-4. Inside the request listener:
-   - `if (request.url === '/api/persons' && request.method === 'GET') {...}` :If the URL of the request is '/api/persons' and the HTTP method is 'GET', the server returns a list of people in response. Each contact is formatted as a string and appended to responseText, then sent as a response.
-   - `else {...}` : If the URL of the request is not '/api/persons' or the HTTP method is not 'GET', the server responds 'Hello World'.
-5. `const PORT = 3001` : Sets the port number the server will listen on.
-6. `app.listen(PORT)` : Starts the server and allows listening for requests on the specified port
-7. `console.log(Server running on port ${PORT})` : It logs a message to the console stating that the server is running and on which port it is.
+1. `else if (request.url === '/info' && request.method === 'GET') {...}`: Adds the ability for the server to respond to requests to the '/info' URL. This response includes the number of people in the contacts list and the current date and time.
 
-In summary, this server responds to 'GET' requests at '/api/persons' with a list of contacts and responds to all other requests with 'Hello World'.
+
+2. `const PORT = process.env.PORT || 3001`: I set the PORT variable to read from environment variables.
 
 ## package.json
 
-The `package.json` file is the configuration file of the Node.js project. It determines the configuration and dependencies of the project. Any changes made to this file will affect how the project runs and what packages it needs. The information it contains and the changes made are as follows:
+I modified the package.json file as follows:
 
-1. `"name": "part3"`: The name of the project is 'part3'.
-2. `"version": "1.0.0"`: The version of the project is determined as '1.0.0'.
-3. `"main": "index.js"`: The main entry point of the project is determined as the 'index.js' file.
-4. `"scripts"`: In this section, some commands related to the project are defined.
-   - `"start": "node index.js"`: The 'start' command is used to run the 'index.js' file.
-   - `"dev": "nodemon index.js"`: The 'dev' command is used to run the 'index.js' file with nodemon. Nodemon detects the changes made to the file and automatically restarts the server.
-   - `"test": "echo \"Error: no test specified\" && exit 1"`: The 'test' command gives an error message because no test has been specified yet.
-5. `"dependencies": {"express": "^4.18.2"}`: This project has a dependency named 'express'. Express is a fast, open-source, minimalist web application framework for Node.js.
-6. `"devDependencies": {"nodemon": "^3.0.1"}`: This project has a development dependency named 'nodemon'. When developing Node.js applications, Nodemon tracks file changes and automatically restarts the application.
+"scripts": {
+  "start": "cross-env PORT=3001 node index.js",
+  "dev": "cross-env PORT=3002 nodemon index.js",
+  "test": "echo \"Error: no test specified\" && exit 1"
+}
+
+I made this change for:
+ 
+We want to start the application simultaneously with both npm start and npm run dev commands. Running the same programs in two instances of the same application may cause a conflict.
+We can use different ports to run the application simultaneously in both development (with nodemon) and production (with node) modes. For this, I changed the scripts in the package.json file to achieve this goal.  
+This solution works on a Unix-based system or a Windows system with Windows Subsystem for Linux (WSL).
+Since I was using a standard Windows command prompt, I used the `cross-env` package to set environment variables. I installed the relevant package using the `npm install --save-dev cross-env` command.
+
+In this way, when you run the npm start command, the application will run on port 3001, and when you run the npm run dev command, the application will run on port 3002.
 
 
-## .gitignore
-
-Right now I'm only adding files that I don't want to be tracked by 'git'. I don't know any other feature.
-
-## package-lock.json
-
-This file provides a complete and precise snapshot of our application's dependencies, and this snapshot ensures that our project always runs the same way.

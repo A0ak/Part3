@@ -31,12 +31,15 @@ const app = http.createServer((request, response) => {
             responseText += `- id: ${person.id}\n  name: ${person.name}\n  number: ${person.number}\n`;
         }
         response.end(responseText);
+    } else if (request.url === '/info' && request.method === 'GET') {
+        response.writeHead(200, { 'Content-Type': 'text/html' })
+        response.end(`Phonebook has info for ${persons.length} people<br/>${new Date()}`);
     } else {
         response.writeHead(200, { 'Content-Type': 'text/plain' })
         response.end('Hello World')
     }
 })
 
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 app.listen(PORT)
 console.log(`Server running on port ${PORT}`)
