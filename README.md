@@ -42,13 +42,7 @@ The code block corresponding to these changes is:
             }
         }
     }
-    ```
+    
 
 
-## Testing that the added functionality works with the Postman or Visual Studio Code REST client:
 
-- A new request is created in the Postman or Visual Studio Code REST client. This is usually done by clicking a "New Request" or similar button.
-- The type of the request is set to DELETE.
-- The URL of the request is set to http://localhost:3001/api/persons/{id}, where {id} is the ID of the person you want to delete. For example, to delete a person with ID 1, the URL would be http://localhost:3001/api/persons/1.
-- The request is sent by clicking "Send" or a similar button.
-- If the person was successfully deleted, the response will be Deleted person with id {id}. If the person is not found, the response will be Person not found.
