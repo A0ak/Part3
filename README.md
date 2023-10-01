@@ -1,11 +1,7 @@
-# 3.6: Phonebook backend step 6
+# 3.1: Phonebook backend step 1
 
-The changes that have been made:
+In part0 there is a statement like this:
 
-## index.js
+A system for detecting plagiarism is used to check exercises submitted to GitHub. If code is found from model answers or multiple students hand in the same code, the situation is handled according to the policy on plagiarism of the University of Helsinki.
 
-Made a change to the `app.post('/api/persons', ...)` endpoint. 
-
-In 3.5, when adding a contact, only the contact's name and number are checked. If any of this information is missing, an error message is returned.
-
-In 3.6, an extra control was added when adding a person. This check checks if the name of the person you want to add already exists. If the name of the person to be added already exists, a "name must be unique" error is returned. This prevents adding more than one person with the same name.
+Therefore, my desire to write original code causes me to go a little beyond what is required in the exercises. In 3.1 I skipped the request in Exercise 1 to display the requested contact list in json format on the server page. However, there was also concern about not being able to pass the task. That's why I wanted to send this as an extra.
