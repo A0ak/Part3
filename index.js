@@ -1,5 +1,6 @@
-const http = require('http')
-const url = require('url')
+const express = require('express')
+const app = express()
+app.use(express.json())
 
 let persons = [
     {
@@ -24,49 +25,61 @@ let persons = [
     }
 ];
 
-const app = http.createServer((request, response) => {
-    const reqUrl = url.parse(request.url, true)
-    const id = reqUrl.pathname.split('/').pop()
+app.get('/api/persons', (request, response) => {
+    let html = '<table border="1"><tr><th>ID</th><th>Name</th><th>Number</th></tr>';
+    persons.forEach(person => {
+        html += `<tr><td>${person.id}</td><td>${person.name}</td><td>${person.number}</td></tr>`;
+    });
+    html += '</table>';
+    response.send(html);
+});
 
-    if (reqUrl.pathname.startsWith('/api/persons')) {
-        if (request.method === 'GET') {
-            if (id === 'persons') {
-                response.writeHead(200, { 'Content-Type': 'text/plain' })
-                let responseText = '';
-                for (let person of persons) {
-                    responseText += `- id: ${person.id}\n  name: ${person.name}\n  number: ${person.number}\n`;
-                }
-                response.end(responseText);
-            } else {
-                const person = persons.find(p => p.id === Number(id))
-                if (person) {
-                    response.writeHead(200, { 'Content-Type': 'text/plain' })
-                    response.end(`- id: ${person.id}\n  name: ${person.name}\n  number: ${person.number}\n`)
-                } else {
-                    response.writeHead(404, { 'Content-Type': 'text/plain' })
-                    response.end('Person not found')
-                }
-            }
-        } else if (request.method === 'DELETE') {
-            const index = persons.findIndex(p => p.id === Number(id))
-            if (index !== -1) {
-                persons.splice(index, 1)
-                response.writeHead(200, { 'Content-Type': 'text/plain' })
-                response.end(`Deleted person with id ${id}`)
-            } else {
-                response.writeHead(404, { 'Content-Type': 'text/plain' })
-                response.end('Person not found')
-            }
-        }
-    } else if (reqUrl.pathname === '/info' && request.method === 'GET') {
-        response.writeHead(200, { 'Content-Type': 'text/html' })
-        response.end(`Phonebook has info for ${persons.length} people<br/>${new Date()}`);
+app.get('/api/persons/:id', (request, response) => {
+    const id = Number(request.params.id)
+    const person = persons.find(person => person.id === id)
+
+    if (person) {
+        response.json(person)
     } else {
-        response.writeHead(200, { 'Content-Type': 'text/plain' })
-        response.end('Hello World')
+        response.status(404).end()
     }
-})
+});
+
+app.delete('/api/persons/:id', (request, response) => {
+    const id = Number(request.params.id)
+    persons = persons.filter(person => person.id !== id)
+
+    response.status(204).end()
+});
+
+app.post('/api/persons', (request, response) => {
+    const body = request.body;
+
+    if (!body.name || !body.number) {
+        return response.status(400).json({
+            error: 'content missing'
+        });
+    }
+
+    const id = Math.floor(Math.random() * 10000);
+
+    const person = {
+        id: id,
+        name: body.name,
+        number: body.number
+    };
+
+    persons = persons.concat(person);
+
+    response.json(person);
+});
+
+app.get('/info', (request, response) => {
+    const date = new Date();
+    response.send(`Phonebook has info for ${persons.length} people<br/>${date}`);
+});
 
 const PORT = process.env.PORT || 3001
-app.listen(PORT)
-console.log(`Server running on port ${PORT}`)
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`)
+});
