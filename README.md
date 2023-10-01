@@ -1,5 +1,3 @@
-# 3.7: Phonebook backend step 7
+# 3.8: Phonebook backend step 8
 
-Morgan middleware added. Morgan is an HTTP request logger middleware for Node.js. It simplifies logging of incoming requests. Here it is used with a 'tiny' configuration, which allows us to log minimal request information.
-
-Thus, logging capabilities have been added to the Express application.
+A new token named 'post' has been created. This token returns the body of each request as a JSON string. The Morgan middleware is then implemented with this new token using a customized format string. This format string determines the information to be logged: HTTP method, URL, status code, content length, response time and the request body obtained with the 'post' token.
