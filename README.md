@@ -43,6 +43,6 @@ The code block corresponding to these changes is:
         }
     }
     
-
+The code block above (conditional expressions section in the index.js file) is the code equivalent of the changes mentioned in Article 3.
 
 
