@@ -12,10 +12,10 @@ const App = () => {
 
     useEffect(() => {
         personService.getAll().then(response => {
-            console.log('API response:', response); // Bu satırı ekleyin
+            console.log('API response:', response);
             if (Array.isArray(response.data)) {
                 response.data.forEach(person => {
-                    console.log(`Person name: ${person.name}, number: ${person.number}`); // Bu satırı ekleyin
+                    console.log(`Person name: ${person.name}, number: ${person.number}`);
                 });
                 setPersons(response.data)
             } else {
@@ -122,7 +122,7 @@ const App = () => {
             <h2>Phonebook</h2>
             {notification && <div className={`notification ${notification.type}`}>{notification.message}</div>}
             <div>
-                Search: <input value={search} onChange={handleSearchChange} /> {/* arama alanını ekle */}
+                Search: <input value={search} onChange={handleSearchChange} />
             </div>
             <h2>Add a new</h2>
             <form onSubmit={addName}>
