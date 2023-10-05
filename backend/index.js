@@ -12,7 +12,7 @@ app.use(express.json())
 morgan.token('post', function (req, res) { return JSON.stringify(req.body) })
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :post'))
 
-let persons = JSON.parse(fs.readFileSync('./backend/db.json')).persons;
+let persons = JSON.parse(fs.readFileSync('./db.json')).persons;
 
 app.get('/api/persons', (request, response) => {
     response.json(persons);
