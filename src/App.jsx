@@ -23,7 +23,7 @@ const App = () => {
                 setPersons([])
             }
         })
-    }, [])
+    }, []) 
 
 
     const handleNameChange = (event) => {
