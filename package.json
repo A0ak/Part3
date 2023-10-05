@@ -2,9 +2,8 @@
   "name": "part3",
   "version": "1.0.0",
   "scripts": {
-    "server": "node backend/index.js",
-    "start": "react-scripts start",
-    "dev": "concurrently \"npm run start\" \"npm run server\"",
+    "start": "node backend/index.js",
+    "react-start": "react-scripts start",
     "dev-nodemon": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev-vite": "vite",
@@ -12,7 +11,7 @@
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "server-json": "json-server -p3001 --watch db.json",
-    "start-both": "concurrently \"npm run start-chrome\" \"npm run start-edge\""
+    "start-both": "concurrently \"npm run react-start\" \"npm run start\""
   },
   "author": "",
   "license": "ISC",

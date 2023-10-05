@@ -1,6 +1,7 @@
 const express = require('express')
 const morgan = require('morgan')
 const fs = require('fs')
+const path = require('path')
 const { v4: uuidv4 } = require('uuid');
 const app = express()
 const cors = require('cors')
@@ -12,7 +13,8 @@ app.use(express.json())
 morgan.token('post', function (req, res) { return JSON.stringify(req.body) })
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :post'))
 
-let persons = JSON.parse(fs.readFileSync('./db.json')).persons;
+let dbPath = path.resolve(__dirname, '..', 'db.json');
+let persons = JSON.parse(fs.readFileSync(dbPath)).persons;
 
 app.get('/api/persons', (request, response) => {
     response.json(persons);
@@ -35,7 +37,7 @@ app.delete('/api/persons/:id', (request, response) => {
     persons = persons.filter(person => person.id !== id)
 
     if (persons.length < initialLength) {
-        fs.writeFileSync('db.json', JSON.stringify({ persons: persons }));
+        fs.writeFileSync(dbPath, JSON.stringify({ persons: persons }));
         response.status(204).end()
     } else {
         response.status(404).json({ error: 'Person not found' })
@@ -65,7 +67,7 @@ app.post('/api/persons', (request, response) => {
 
     persons = persons.concat(person);
 
-    fs.writeFileSync('db.json', JSON.stringify({ persons: persons }));
+    fs.writeFileSync(dbPath, JSON.stringify({ persons: persons }));
 
     response.json(person);
 });
