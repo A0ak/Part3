@@ -79,7 +79,7 @@ app.get('/info', (request, response) => {
     response.send(`Phonebook has info for ${persons.length} people<br/>${date}`);
 });
 
-
+app.use(express.static(path.join(__dirname, 'dist')));
 
 app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, '..', 'dist', 'index.html'));
