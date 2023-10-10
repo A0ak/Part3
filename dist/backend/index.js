@@ -10,7 +10,7 @@ app.use(cors())
 
 app.use(express.json())
 
-app.use(express.static(path.join(__dirname, 'dist')));
+app.use(express.static(path.join(__dirname, '..', 'dist')));
 
 morgan.token('post', function (req, res) { return JSON.stringify(req.body) })
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :post'))
