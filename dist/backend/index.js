@@ -9,9 +9,9 @@ const cors = require('cors');
 app.use(cors());
 app.use(express.json());
 
-const distPath = path.join(__dirname, '..', 'dist');
+const staticPath = path.join(__dirname, '..', 'dist', 'static');
 
-app.use(express.static(distPath));
+app.use(express.static(staticPath));
 
 morgan.token('post', function (req, res) { return JSON.stringify(req.body) });
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :post'));
