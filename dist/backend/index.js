@@ -1,19 +1,20 @@
-const express = require('express')
-const morgan = require('morgan')
-const fs = require('fs')
-const path = require('path')
+const express = require('express');
+const morgan = require('morgan');
+const fs = require('fs');
+const path = require('path');
 const { v4: uuidv4 } = require('uuid');
-const app = express()
-const cors = require('cors')
+const app = express();
+const cors = require('cors');
 
-app.use(cors())
+app.use(cors());
+app.use(express.json());
 
-app.use(express.json())
+const distPath = path.join(__dirname, '..', 'dist');
 
-app.use(express.static(path.join(__dirname, '..', 'dist')));
+app.use(express.static(distPath));
 
-morgan.token('post', function (req, res) { return JSON.stringify(req.body) })
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms :post'))
+morgan.token('post', function (req, res) { return JSON.stringify(req.body) });
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :post'));
 
 let dbPath = path.resolve(__dirname, '..', 'db.json');
 let persons = JSON.parse(fs.readFileSync(dbPath)).persons;
@@ -75,15 +76,15 @@ app.post('/api/persons', (request, response) => {
 });
 
 app.get('/info', (request, response) => {
-    const date = new Date();
-    response.send(`Phonebook has info for ${persons.length} people<br/>${date}`);
+  const date = new Date();
+  response.send(`Phonebook has info for ${persons.length} people<br/>${date}`);
 });
 
 app.get('/', (req, res) => {
-    res.send('Backend is running!')
-})
+  res.send('Backend is running!')
+});
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`)
+  console.log(`Server running on port ${PORT}`);
 });
