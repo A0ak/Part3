@@ -17,7 +17,7 @@ app.use(express.json())
 morgan.token('post', function (req, res) { return JSON.stringify(req.body) })
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :post'))
 
-let persons = JSON.parse(fs.readFileSync('./db.json')).persons;
+let persons = JSON.parse(fs.readFileSync('../db.json')).persons;
 
 app.get('/api/persons', (request, response) => {
     response.json(persons);
@@ -40,7 +40,7 @@ app.delete('/api/persons/:id', (request, response) => {
     persons = persons.filter(person => person.id !== id)
 
     if (persons.length < initialLength) {
-        fs.writeFileSync('./db.json', JSON.stringify({ persons: persons }));
+        fs.writeFileSync('../db.json', JSON.stringify({ persons: persons }));
         response.status(204).end()
     } else {
         response.status(404).json({ error: 'Person not found' })
