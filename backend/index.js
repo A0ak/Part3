@@ -24,6 +24,14 @@ const path = require('path');
 let dbPath = path.join(__dirname, '../db.json');
 let persons = JSON.parse(fs.readFileSync(dbPath)).persons;
 
+app.get('/', (request, response) => {
+    response.send('Hello, World!');
+});
+
+app.post('/', (request, response) => {  
+    response.json({ message: 'POST request received' });
+});
+
 app.get('/api/persons', (request, response) => {
     response.json(persons);
 });
