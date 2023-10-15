@@ -3,6 +3,8 @@ const morgan = require('morgan')
 const fs = require('fs')
 const { v4: uuidv4 } = require('uuid');
 const app = express()
+const WebSocket = require('ws');
+
 app.use(function(req, res, next) {
     res.setHeader("Content-Security-Policy", "default-src 'none'; style-src 'self' https://www.gstatic.com;");
     return next();
@@ -85,4 +87,13 @@ app.get('/info', (request, response) => {
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
+});
+
+const wss = new WebSocket.Server({ server });
+
+wss.on('connection', ws => {
+  ws.on('message', message => {
+    console.log(`Received message => ${message}`)
+  })
+  ws.send('Hello! Message From Server!!')
 });
