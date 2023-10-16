@@ -3,16 +3,16 @@ const morgan = require('morgan')
 const fs = require('fs')
 const { v4: uuidv4 } = require('uuid');
 const app = express()
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
     res.setHeader("Content-Security-Policy", "default-src 'none'; style-src 'self' https://www.gstatic.com;");
     return next();
-  });
+});
 
 const cors = require('cors')
 
 app.use(cors())
 
-app.use(express.json()) 
+app.use(express.json())
 
 morgan.token('post', function (req, res) { return JSON.stringify(req.body) })
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :post'))
@@ -83,4 +83,4 @@ app.get('/info', (request, response) => {
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
-});
+});   
