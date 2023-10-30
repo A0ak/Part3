@@ -33,14 +33,7 @@ app.get('/api/persons/:id', (request, response) => {
     });
 });
 
-app.delete('/api/persons/:id', (request, response) => {
-    const id = request.params.id
-    db.deletePerson(id).then(() => {
-        response.status(204).end()
-    }).catch(error => {
-        response.status(404).json({ error: 'Person not found' })
-    });
-});
+
 
 app.post('/api/persons', (request, response) => {
     const body = request.body;

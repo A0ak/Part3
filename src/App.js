@@ -13,7 +13,7 @@ const App = () => {
             console.log('API response:', response);
             if (Array.isArray(response)) {
                 const validPersons = response.map(person => ({
-                    id: person._id, 
+                    id: person._id,
                     name: person.name,
                     number: person.number
                 }));
@@ -83,29 +83,7 @@ const App = () => {
         }
     };
 
-    const deleteName = (id) => {
-        const personToDelete = persons.find(person => person.id === id);
-        if (personToDelete) {
-            if (window.confirm("Do you really want to delete this person?")) {
-                api.deletePerson(id)
-                    .then(() => {
-                        setPersons(persons.filter(person => person.id !== id))
-                        setNotification({ message: `Deleted ${personToDelete.name}`, type: 'success' });
-                        setTimeout(() => {
-                            setNotification(null);
-                        }, 5000);
-                    })
-                    .catch(error => {
-                        setNotification({ message: `Failed to delete ${personToDelete.name}`, type: 'error' });
-                        setTimeout(() => {
-                            setNotification(null);
-                        }, 5000);
-                    })
-            }
-        } else {
-            console.error(`Person with ID ${id} not found`);
-        }
-    };
+
 
     const filteredPersons = persons
         ? persons.filter(person =>

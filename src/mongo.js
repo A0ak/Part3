@@ -1,6 +1,6 @@
 const { MongoClient, ObjectId } = require('mongodb');
 
-const uri = "mongodb+srv://allahinkulu:xxxxxxx@cluster.ftbdzpb.mongodb.net/?retryWrites=true&w=majority";
+const uri = "mongodb+srv://allahinkulu:456852@cluster.ftbdzpb.mongodb.net/?retryWrites=true&w=majority";
 
 const client = new MongoClient(uri);
 
@@ -30,19 +30,6 @@ const getPerson = async (id) => {
     return await collection.findOne({ _id: ObjectId(id) });
 };
 
-const deletePerson = async (id) => {
-    try {
-        await client.connect();
-        const collection = client.db(databaseName).collection(collectionName);
-        const result = await collection.deleteOne({ _id: ObjectId(id) });
-        if (result.deletedCount === 0) {
-            throw new Error(`No person with ID ${id} found`);
-        }
-    } catch (error) {
-        console.error(error);
-        throw error;
-    }
-};
 
 const createPerson = async (person) => {
     const collection = db.collection(collectionName);
@@ -51,4 +38,4 @@ const createPerson = async (person) => {
 
 connectDB().catch(console.error);
 
-module.exports = { getAllPersons, getPerson, deletePerson, createPerson };
+module.exports = { getAllPersons, getPerson, createPerson };
