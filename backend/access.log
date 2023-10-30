@@ -1,1 +1,8 @@
 
+GET /api/persons 304 - - 86.800 ms {}
+POST /api/persons 200 61 - 86.405 ms {"name":"gfhh","number":"756786","_id":"654006a7eb586418c8f5e69e"}
+GET /api/persons 200 212 - 76.103 ms {}
+GET /api/persons 304 - - 77.535 ms {}
+GET /favicon.ico 404 150 - 3.064 ms {}
+GET /api/persons 200 2 - 89.121 ms {}
+GET /api/persons 304 - - 71.220 ms {}
